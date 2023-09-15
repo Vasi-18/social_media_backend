@@ -45,7 +45,7 @@ router.post("/upload", upload.single("image"), async (req, res) => {
       const image = new Image({
         filename: req.file.filename,
       });
-      await image.onmouseleave();
+      await image.save();
       res.status(200).json("File uploded successfully");
     } catch (error) {
       console.error(error);
