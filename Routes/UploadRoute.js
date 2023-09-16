@@ -1,3 +1,29 @@
+// import express from 'express'
+// const router = express.Router()
+// import multer from 'multer'
+
+// const storage = multer.diskStorage({
+//     destination: (req, file, cb) => {
+//       cb(null, "public/images");
+//     },
+//     filename: (req, file, cb) => {
+//       cb(null, req.body.name);
+//     },
+//   });
+// const upload = multer({ storage: storage });
+
+
+// router.post("/", upload.single("file"), (req, res) => {
+//     try {
+//       return res.status(200).json("File uploded successfully");
+//     } catch (error) {
+//       console.error(error);
+//     }
+//   });
+
+// export default router
+
+
 import express from 'express'
 const router = express.Router()
 import multer from 'multer'
@@ -7,15 +33,20 @@ const storage = multer.diskStorage({
       cb(null, "public/images");
     },
     filename: (req, file, cb) => {
-      cb(null, req.body.name);
+      cb(null, file.originalname);
     },
+
   });
 const upload = multer({ storage: storage });
 
 
-router.post("/", upload.single("file"), (req, res) => {
+router.post("/upload", upload.single("image"), async (req, res) => {
     try {
-      return res.status(200).json("File uploded successfully");
+      const image = new Image({
+        filename: req.file.filename,
+      });
+      await image.save();
+      res.status(200).json("File uploded successfully");
     } catch (error) {
       console.error(error);
     }
